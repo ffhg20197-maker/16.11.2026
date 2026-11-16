@@ -1,0 +1,23 @@
+name: Basic Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  greeting-job:
+    name: Greeting and runner information
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print greeting
+        run: echo "Hello! The basic GitHub Actions workflow is running successfully."
+
+      - name: Print runner and system information
+        run: |
+          echo "Runner OS: $RUNNER_OS"
+          echo "Runner name: $RUNNER_NAME"
+          echo "Current user: $(whoami)"
+          echo "Working directory: $(pwd)"
+          echo "System information:"
+          uname -a
+          echo "Git version:"
+          git --version

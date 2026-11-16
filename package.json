@@ -1,0 +1,9 @@
+{
+  "name": "github-actions-lecture-practice",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Minimal Node.js project used to demonstrate GitHub Actions path filters and CI.",
+  "scripts": {
+    "test": "node --test"
+  }
+}

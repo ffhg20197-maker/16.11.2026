@@ -1,0 +1,67 @@
+name: Advanced Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Deployment environment
+        type: choice
+        options:
+          - staging
+          - production
+        required: true
+        default: staging
+      build_number:
+        description: Build number for this run
+        type: string
+        required: true
+        default: '1'
+      debug_mode:
+        description: Enable additional debug output
+        type: boolean
+        required: true
+        default: false
+
+jobs:
+  linux-build:
+    name: Linux build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out full repository history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Display workflow inputs
+        run: |
+          echo "Environment: ${{ inputs.environment }}"
+          echo "Build number: ${{ inputs.build_number }}"
+          echo "Debug mode: ${{ inputs.debug_mode }}"
+
+      - name: Count repository commits
+        run: |
+          echo "Total commits on the checked-out revision:"
+          git rev-list --count HEAD
+
+      - name: Validate workflow YAML syntax
+        run: |
+          ruby -e 'require "yaml"; YAML.load_file(".github/workflows/basic-workflow.yml"); YAML.load_file(".github/workflows/ci-filter.yml"); YAML.load_file(".github/workflows/advanced-pipeline.yml"); puts "All workflow YAML files are syntactically valid."'
+
+  windows-build:
+    name: Windows build
+    runs-on: windows-latest
+    steps:
+      - name: Display workflow inputs
+        shell: pwsh
+        run: |
+          Write-Output "Environment: ${{ inputs.environment }}"
+          Write-Output "Build number: ${{ inputs.build_number }}"
+          Write-Output "Debug mode: ${{ inputs.debug_mode }}"
+
+      - name: Display Windows runner information
+        shell: pwsh
+        run: |
+          Write-Output "Runner OS: $env:RUNNER_OS"
+          Write-Output "Runner name: $env:RUNNER_NAME"
+          Write-Output "PowerShell version: $($PSVersionTable.PSVersion)"
+          Write-Output "Current directory: $(Get-Location)"
